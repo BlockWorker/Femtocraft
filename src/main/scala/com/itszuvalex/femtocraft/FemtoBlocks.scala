@@ -2,6 +2,7 @@ package com.itszuvalex.femtocraft
 
 import com.itszuvalex.femtocraft.core.Initializable
 import com.itszuvalex.femtocraft.logistics.test.{BlockTaskProviderTest, BlockWorkerProviderTest}
+import com.itszuvalex.femtocraft.machineframe.{BlockLogisticFrame, BlockNormalFrame}
 import com.itszuvalex.femtocraft.power.test._
 import com.itszuvalex.femtocraft.worldgen.block.BlockCrystalsWorldgen
 import cpw.mods.fml.common.registry.GameRegistry
@@ -23,6 +24,9 @@ object FemtoBlocks extends Initializable {
 
   var testTaskProvider  : Block = null
   var testWorkerProvider: Block = null
+
+  var normalFrame : Block = null
+  var logisticFrame : Block = null
 
 
   override def preInit(): Unit = {
@@ -56,6 +60,14 @@ object FemtoBlocks extends Initializable {
     testWorkerProvider = new BlockWorkerProviderTest
     testWorkerProvider.setBlockName("testWorkerProvider")
     GameRegistry.registerBlock(testWorkerProvider, "testWorkerProvider")
+
+    normalFrame = new BlockNormalFrame
+    normalFrame.setBlockName("normalFrame")
+    GameRegistry.registerBlock(normalFrame, "normalFrame")
+    logisticFrame = new BlockLogisticFrame
+    logisticFrame.setBlockName("logisticFrame")
+    GameRegistry.registerBlock(logisticFrame, "logisticFrame")
+
   }
 
   override def init(): Unit = {
