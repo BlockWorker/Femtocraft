@@ -2,12 +2,14 @@ package com.itszuvalex.femtocraft.power.render
 
 import com.itszuvalex.femtocraft.Femtocraft
 import com.itszuvalex.femtocraft.power.node.IPowerNode
-import com.itszuvalex.femtocraft.render.{BetterWavefrontObject, BetterObjModelLoader}
 import com.itszuvalex.itszulib.util.Color
+import net.minecraft.client.Minecraft
+import net.minecraft.client.renderer.Tessellator
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
 import net.minecraft.tileentity.TileEntity
 import net.minecraft.util.{MathHelper, ResourceLocation}
 import net.minecraftforge.client.model.AdvancedModelLoader
+import net.minecraftforge.client.model.obj.WavefrontObject
 import org.lwjgl.opengl.GL11
 
 /**
@@ -19,10 +21,15 @@ object NodeCrystalRenderer {
 }
 
 trait NodeCrystalRenderer extends TileEntitySpecialRenderer {
-  AdvancedModelLoader.registerModelHandler(new BetterObjModelLoader)
-  val crystalModel = AdvancedModelLoader.loadModel(NodeCrystalRenderer.crystalModelLocation).asInstanceOf[BetterWavefrontObject]
+  val crystalModel = AdvancedModelLoader.loadModel(NodeCrystalRenderer.crystalModelLocation).asInstanceOf[WavefrontObject]
+
+  def renderNode(node: TileEntity with IPowerNode, x:Double, y:Double, z:Double, partialTime: Float) = {
+    Minecraft.getMinecraft.getTextureManager.bindTexture(NodeCrystalRenderer.crystalTexLocation)
+    renderCrystal(x, y, z, node, partialTime)
+  }
 
   def renderCrystal(x: Double, y: Double, z: Double, node: TileEntity with IPowerNode, partialTime: Float): Unit = {
+    val tessellator = Tessellator.instance
     val color = new Color(node.getColor)
     GL11.glPushMatrix()
     GL11.glDisable(GL11.GL_LIGHTING)
@@ -33,7 +40,7 @@ trait NodeCrystalRenderer extends TileEntitySpecialRenderer {
     GL11.glColor4ub(color.red, color.green, color.blue, 220.toByte)
 
     val f2: Float = node.getWorldObj.getTotalWorldTime.toFloat + partialTime
-    (1 to 10).map(num => ("Gengon0" + (if (num < 10) "0" else "") + num, num)).foreach { name =>
+    (1 to 10).map(num => ("Gengon0" + (if (num < 10) "0") + num, num)).foreach { name =>
       val offset = (name._2 * 97) % 10
       val dir = if (name._2 % 2 == 0) -1 else 1
       GL11.glPushMatrix()
@@ -47,6 +54,7 @@ trait NodeCrystalRenderer extends TileEntitySpecialRenderer {
                                                                                }
     GL11.glEnable(GL11.GL_LIGHTING)
     GL11.glColor4f(1f, 1f, 1f, 1f)
+    tessellator.setColorRGBA(255, 255, 255, 0)
     GL11.glPopMatrix()
   }
 }
