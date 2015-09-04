@@ -30,6 +30,8 @@ import net.minecraft.inventory.{Container, IInventory}
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NBTTagCompound
 
+import scala.collection.Set
+
 /**
  *
  * @param size Utility class for storing and saving/loading ItemStack[]s with ease.
@@ -141,7 +143,11 @@ class IndexedInventory(size: Int) extends IInventory with IIndexedInventory with
 
   override def invalidateCache() = inventoryCache.invalidateCache()
 
-  override def isValid = inventoryCache.isValid
+  override def isCacheValid = inventoryCache.isCacheValid
 
   override def rebuildCacheIfNecessary() = inventoryCache.rebuildCacheIfNecessary()
+
+  override def getContainedOres: Set[String] = inventoryCache.getContainedOres
+
+  override def getContainedIDs: Set[Int] = inventoryCache.getContainedIDs
 }

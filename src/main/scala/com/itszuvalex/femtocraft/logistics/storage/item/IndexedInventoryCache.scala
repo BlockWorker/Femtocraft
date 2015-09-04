@@ -72,6 +72,9 @@ class IndexedInventoryCache(private val inventory: IInventory) extends IIndexedI
     oresMap.contains(OreDictionary.getOreID(ore))
   }
 
+  override def getContainedOres: scala.collection.Set[String] = oresMap.keySet.map(OreDictionary.getOreName)
+
+  override def getContainedIDs: scala.collection.Set[Int] = idMap.keySet
 
   override def invalidateCache() = {
     invalid = true
@@ -88,5 +91,5 @@ class IndexedInventoryCache(private val inventory: IInventory) extends IIndexedI
     if (invalid) rebuildCache()
   }
 
-  override def isValid: Boolean = !invalid
+  override def isCacheValid: Boolean = !invalid
 }
